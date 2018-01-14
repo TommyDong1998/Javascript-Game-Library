@@ -1,0 +1,20 @@
+{
+  "name": "sword",
+  "version": "1.0.0",
+  "description": "Game",
+  "main": "source/index.js",
+  "scripts": {
+    "start": "node example/index.js"
+  },
+  "author": "Tommy Dong",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "eventemitter3": "x.x.x",
+    "node-gameloop": "x.x.x",
+    "sat": "x.x.x"
+  },
+  "engines": {
+    "node": "6.9.1"
+  },
+  "license": "MIT"
+}
