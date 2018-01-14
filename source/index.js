@@ -3,24 +3,8 @@ var gameloop=require("node-gameloop");
 var sat= require("sat");
 var SpatialHash = require('./spatialhash.js');
 var util=require("util")
-//const cluster = require('cluster');
-//var myCache = require('cluster-node-cache')(cluster);
-const numCPUs = require('os').cpus().length;
-var Promise = require("bluebird");
+var Promise = require( "bluebird");
 
-/*
-//2D Collision
-cluster.setupMaster({
-  exec: __dirname+'/collide.js'
-})
-// Fork workers.
-for (let i = 0; i < numCPUs; i++) {
-	cluster.fork();
-}
-cluster.on('exit', (worker, code, signal) => {
-	console.log(`worker ${worker.process.pid} died`);
-});
-*/
 function getCollisions(sword){
 //	return new Promise((resolve)=>{
 	var collision=[]
@@ -46,75 +30,30 @@ function getCollisions(sword){
 			})
 			a.entity.emit("collision",a.collide)
 		})
-			//resolve()
-		//})
-		/*
-	var collide=[];
-	sword.map.forEach((entity)=>{
-		var items=[]
-		if(entity.range&&entity.has("collision")){
-			var item=sword.maphash.query(entity.range,(item)=>{
-				return entity!=item
-			}).forEach((item)=>{
-				items.push({entity:sword.map.indexOf(item),polygon:item.polygon})
-			})
-			if(items.length){
-				collide.push({entity:sword.map.indexOf(entity),polygon:entity.polygon,items})
-			}
-		}
-	})
 	
-	var fork=[]
-	var item=Math.ceil(collide.length/numCPUs)
-	for (const id in cluster.workers){
-		if(collide.length){
-		fork.push(new Promise((resolve)=>{
-			cluster.workers[id].once('message',(message)=>{
-				message.forEach((entity)=>{
-					if(sword.map[entity.id]){
-						var collide=[]
-						entity.item.forEach((entity)=>{
-							if(sword.map[entity])
-								collide.push(sword.map[entity])
-						})
-						if(collide.length)
-							sword.map[entity.id].emit("collision",collide)
-					}
-				})
-				resolve();
-			});
-			cluster.workers[id].send(collide.slice(0,item))
-			collide=collide.slice(item)
-		}).catch((error)=>{console.log(error)}))
-		}
-	}
-	return Promise.all(fork)
-	*/
 }
 
 var sword=function(){
 	this.world=new sword.map();
 	this.sword={width:1500,height:768};
-	var swordWorld=this;
+	this.swordWorld=this;
 	sword.entity.call(this);
 	this.event=["Velocity","NextFrame","LastFrame"];
 	
 	
-	this.loop=gameloop.setGameLoop(function(delta){
-		sword.sec=delta;
-			swordWorld.event.forEach(function(e){
+	this.loop=gameloop.setGameLoop((ms)=>{
+		sword.sec=ms;
+			this.event.forEach((e)=>{
 			if(e=="NextFrame")
-			getCollisions(swordWorld.world);
-				swordWorld.world.map.forEach(function(entity){
-						if(entity.has("collision")||entity.has("screen")){
-							entity.emit(e,delta);
-						}
+			getCollisions(this.swordWorld.world);
+				this.world.map.forEach((entity)=>{
+						entity.emit(e,ms);
 					})				
 			})
 	},1000/30);
 	gameloop.setGameLoop((delta)=>{
-		swordWorld.event.forEach(function(e){	
-				swordWorld.world.map.forEach(function(entity){
+		this.event.forEach((e)=>{	
+				this.world.map.forEach(function(entity){
 						if(entity.has("player")){
 							entity.emit("Display",delta);
 						}
@@ -140,6 +79,7 @@ sword.e=function(component){
 	Object.assign(object,sword.entity.prototype);
 	sword.entity.call(object);
 	object.world=this.world	
+	object.swordWorld=this
 	object.addComponent(component);
 	if(this.world)
 		this.world.push(object);
@@ -282,8 +222,10 @@ sword["2D"].width=function(){
 		if(list[point].x>largest)
 			largest=list[point].x;
 	}
+	
 	return largest-smallest
 }
+
 sword["2D"].resize=function(w,h){
 	var size={}
 	if(w&&h){
@@ -323,7 +265,20 @@ sword["2D"].height=function(){
 	}
 	return largest-smallest
 }
-
+sword.solid=function(){
+	var tha=this
+	this.on("Set",function(){
+		var response=new sat.Response();
+		this.swordWorld.world.maphash.query(this.range,(entity)=>{
+			return this!=entity&&entity.has("solid")&&(!this.ignore||this.ignore.findIndex((component)=>{return entity.has(component)!=-1})==-1)
+		}).forEach((entity)=>{
+			this.collide(entity,undefined,response)
+			this.pos.x-=response.overlapV.x
+			this.pos.y-=response.overlapV.y
+			response.clear()
+		})
+	})
+}
 
 
 sword["2D"].collide=function(entity,polygon,response){
@@ -347,17 +302,9 @@ sword["2D"].collide=function(entity,polygon,response){
 
 
 sword.collision=function(){
-	/*var that=this
-	this.on("NextFrame",()=>{
-		var collide=this.world.search(this.polygon,(entity)=>{
-			return entity!=this
-		});
-		if(collide.length){
-			this.emit("collision", collide)
-		}
-	})
-	return this;
-	*/
+	
+	
+	
 }
 sword.collision.onCollide=function(type,callback){
 	this.colFn=this.colFn||[]
@@ -427,8 +374,6 @@ sword.map.prototype.search=function(polygon,req){
 //////////////////
 ////
 //////////////////
-
-//var game={width:1500,height:768}
 
 /////////////////
 //stats/////////
