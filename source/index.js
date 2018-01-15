@@ -112,9 +112,11 @@ sword["2D"]=function(){
 	this.velocity=new sat.Vector();
 	this.on("Velocity",function(delta){
 		if(Math.abs(this.velocity.x)>=1||Math.abs(this.velocity.y)>=1){
-			this.pos.x+=this.velocity.x*delta
-			this.pos.y+=this.velocity.y*delta
-			this.emit("Set",{x:this.velocity.x*delta,y:this.velocity.y*delta})
+			//this.pos.x+=this.velocity.x*delta
+			//this.pos.y+=this.velocity.y*delta
+			this.setLocation(this.left().x+this.velocity.x*delta,this.left().y+this.velocity.y*delta)
+			//this.emit("updateLocation")
+			//this.emit("Set",{x:this.velocity.x*delta,y:this.velocity.y*delta})
 		}
 	})
 	this.prev=new sat.Vector();
@@ -267,19 +269,33 @@ sword["2D"].height=function(){
 }
 sword.solid=function(){
 	var tha=this
-	this.on("Set",function(){
-		var response=new sat.Response();
-		this.swordWorld.world.maphash.query(this.range,(entity)=>{
-			return this!=entity&&entity.has("solid")&&(!this.ignore||this.ignore.findIndex((component)=>{return entity.has(component)!=-1})==-1)
-		}).forEach((entity)=>{
-			this.collide(entity,undefined,response)
+	this.on("Set",(lat)=>{
+		//var response=new sat.Response();
+		if(this.solid((entity,response)=>{
+			//this.collide(entity,undefined,response)
 			this.pos.x-=response.overlapV.x
 			this.pos.y-=response.overlapV.y
-			response.clear()
-		})
+			this.emit("updateLocation")
+		}).length){
+			
+		}
 	})
 }
-
+sword.solid.solid=function(solid){
+	var tha=this
+	return this.swordWorld.world.maphash.query(this.range,(entity)=>{
+		return this!=entity&&entity.has("solid")&&(!this.ignore||this.ignore.findIndex((component)=>{return entity.has(component)})==-1)
+	}).filter((entity)=>{
+		var response=new sat.Response();
+		if(this.collide(entity,undefined,response)&&(Math.abs(response.overlapV.x)>0||Math.abs(response.overlapV.y)>0)){
+			if(solid){
+				solid(entity,response)
+				response.clear()
+			}
+			return true
+		}
+	})
+}
 
 sword["2D"].collide=function(entity,polygon,response){
 	if(!polygon)
@@ -324,9 +340,9 @@ sword.map=function(){
 sword.map.prototype.push=function(entity){
 	var hash=this
 	///////////////////////////
-		entity.on("Set",function(){
-			entity.emit("updateLocation")
-		})
+		//entity.on("Set",function(){
+		//	entity.emit("updateLocation")
+		//})
 		entity.on("updateLocation",function(){
 			if(!entity.notExist){
 			var cen=entity.middle()
