@@ -64,6 +64,7 @@ var sword=function(){
 var nextid=0;
 function removeAll(){
 		this.notExist=true;
+//		console.log(this.component)
 		//Not for events
 		process.nextTick(()=>{
 			//console.log("test")
@@ -162,14 +163,28 @@ sword["2D"].polygon=function(coord){
 	return this;
 }
 
+sword["2D"].setOrigin=function(x,y){
+	this.origin={x:Math.floor(x),y:Math.floor(y)}
+}
+sword["2D"].rotate=function(degree){
+	this.degree=this.degree||0
+	var diff=degree-this.degree
+	this.degree=degree
+	this.polygon.translate(this.origin.x*-1,this.origin.y*-1)
+	this.polygon.rotate(diff)
+	this.polygon.translate(this.origin.x,this.origin.y)
+    return this;
+}
 sword["2D"].box=function(w,h){
 	var vector
 	if(this.polygon)
 		vector=this.polygon.pos
 	else
 		vector=new sat.Vector()
-	this.polygon=new sat.Box(vector,w,h).toPolygon();
+	this.polygon=new sat.Box(vector,Math.floor(w),Math.floor(h)).toPolygon();
 	this.pos=this.polygon.pos
+	this.setOrigin(w/2,h/2)
+	//this.polygon.setOffset(w/2,h/2)
 	return this;
 }
 
@@ -184,8 +199,9 @@ sword["2D"].circle=function(length){
 	return this;
 }
 sword["2D"].setLocation=function(x,y){
-	var px=x-this.left().x;
-	var py=y-this.left().y
+	var val=this.left()
+	var px=Math.round((x-val.x)*1000)/1000;
+	var py=Math.round((y-val.y)*1000)/1000;
 	this.polygon.pos.x+=px;
 	this.polygon.pos.y+=py;
 	this.emit("updateLocation")
@@ -214,18 +230,20 @@ sword["2D"].middle=function(){
 }
 sword["2D"].width=function(){
 	if(this.polygon instanceof sat.Circle)
-		return this.polygon.r*2
-	var list=this.polygon.points;
-	var smallest=0;
-	var largest=0;
-	for(var point=0;point<list.length;point++){
-		if(list[point].x<smallest)
-			smallest=list[point].x;
-		if(list[point].x>largest)
-			largest=list[point].x;
+			return this.polygon.r*2
+	if(!this.polygon.width){
+		var list=this.polygon.points;
+		var smallest=0;
+		var largest=0;
+		for(var point=0;point<list.length;point++){
+			if(list[point].x<smallest)
+				smallest=list[point].x;
+			if(list[point].x>largest)
+				largest=list[point].x;
+		}
+		this.polygon.width= largest-smallest
 	}
-	
-	return largest-smallest
+	return this.polygon.width
 }
 
 sword["2D"].resize=function(w,h){
@@ -254,8 +272,10 @@ sword["2D"].resize=function(w,h){
 	return null;
 }
 sword["2D"].height=function(){
-	if(this.polygon instanceof sat.Circle)
+		if(this.polygon instanceof sat.Circle)
 		return this.polygon.r*2
+	
+	if(!this.polygon.height){
 	var list=this.polygon.points;
 	var smallest=0;
 	var largest=0;
@@ -265,7 +285,9 @@ sword["2D"].height=function(){
 		if(list[point].y>largest)
 			largest=list[point].y;
 	}
-	return largest-smallest
+		this.polygon.height= largest-smallest
+	}
+	return this.polygon.height
 }
 sword.solid=function(){
 	var tha=this
@@ -335,7 +357,7 @@ sword.map=function(){
 		y:5000,
 		w:5000,
 		h:5000
-	}, 100);
+	}, 300);
 }
 sword.map.prototype.push=function(entity){
 	var hash=this

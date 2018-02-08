@@ -1,5 +1,5 @@
 {
-  "name": "sword",
+  "name": "swordengine",
   "version": "1.0.0",
   "description": "Game",
   "main": "source/index.js",
