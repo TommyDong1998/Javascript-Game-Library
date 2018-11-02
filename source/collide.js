@@ -1,21 +1,4 @@
-const cluster = require('cluster');
 var sat= require("sat");
-
-var item=[]
-cluster.worker.on("message",(message)=>{
-	message.forEach(function(entity){
-		var col=[]
-		entity.items.forEach(function(polygon){
-			if(collide(entity,polygon)){
-				col.push(polygon.entity)
-			}
-		})
-		if(col.length)
-		item.push({id:entity.entity,item:col})
-	})
-	//console.log(item)
-	cluster.worker.send(item)
-})
 
 function collide(entity,polygon,response){
 	if(!polygon)
