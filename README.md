@@ -1,7 +1,10 @@
 # Sword
 Example Game made at [here](http://multiplayerdungeon-env.eba-sdwfkmve.us-east-1.elasticbeanstalk.com/)
 
-![npm version](https://img.shields.io/npm/v/swordengine)
+![npm version](https://img.shields.io/npm/v/swordengine)- 
+![Statements](https://img.shields.io/badge/statements-57.07%25-red.svg?style=flat)
+![Branches](https://img.shields.io/badge/branches-48.38%25-red.svg?style=flat)
+![Functions](https://img.shields.io/badge/functions-52.5%25-red.svg?style=flat)
 ![Lines](https://img.shields.io/badge/lines-57.07%25-red.svg?style=flat)
 
 ## How to install
