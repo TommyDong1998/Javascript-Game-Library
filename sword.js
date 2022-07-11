@@ -306,6 +306,7 @@
 
         let lastTick = Date.now();
         const loop=setInterval(() => {
+            this.emit('nextFrame');
             //Calculate delta
             const currentTicket=Date.now();
             let delta=(currentTicket-lastTick)/1000;
@@ -348,7 +349,6 @@
                 }
             });
             undoVelocity = [];
-            this.emit('processFinish');
         }, Math.floor(1000 / settings.speed/10)*10);
         if(cb)
     		cb(settings, socket);

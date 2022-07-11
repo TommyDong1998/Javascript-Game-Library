@@ -18,7 +18,7 @@ var monster=new Monster();
 
 monster.setPosition(100,100);
 
-monster.velocityToward(1,0,10)	//Move right at 10 a second
+monster.velocityToward(10,)	//Move right at 10 a second
 
 var prev={};
 monster.on("NextFrame",()=>{
