@@ -25,6 +25,7 @@ monster.setPosition(100,100);
 monster.setVelocity(10,0);	//Move right at 10 a second
 
 const grass=map.e(Monster);
+
 grass.setPosition(150,100);
 var prev={};
 monster.on("NextFrame",()=>{
