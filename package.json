@@ -4,7 +4,9 @@
   "description": "Game",
   "main": "sword.js",
   "scripts": {
-    "start": "node example/index.js"
+    "start": "node example/index.js",
+    "test": "mocha",
+    "publish": "npm publish --access public"
   },
   "author": "Tommy Dong",
   "dependencies": {
