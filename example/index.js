@@ -1,4 +1,4 @@
-var sword=require("../source/index.js")
+var sword=require("../sword.js")
 ///////////////
 //Monster move right
 //Monster touch stone
