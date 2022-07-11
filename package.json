@@ -2,7 +2,7 @@
   "name": "swordengine",
   "version": "1.0.1",
   "description": "Game",
-  "main": "index.js",
+  "main": "sword.js",
   "scripts": {
     "start": "node example/index.js"
   },
