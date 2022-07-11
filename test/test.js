@@ -128,12 +128,60 @@ describe('Sword', function () {
     obj2.circle(2,1);
     assert.equal(TestMap.find(obj).length, 1);
     
-    let success=false;
     obj2.once("collide",function(){
-      success=true;
       Sword.stop();
       done()
     })
+  });
+
+  it('velocity should trigger', function (done) {
+    const Sword= new sword();
+    const TestMap=new sword.GameMap();
+    const obj=new sword.Entity(1,1);
+    Sword.emit('velocity',obj);
+    obj.box(1,1);
+    obj.setVelocity(1,1);
+
+    obj.once("velocity",function(){
+      Sword.stop();
+      done()
+    })
+  });
+
+  it('objects that emit undoVelocity return to original location', function (done) {
+    const Sword= new sword();
+    const TestMap=new sword.GameMap();
+    const obj=new sword.Entity(1,1);
+    Sword.emit('velocity',obj);
+    obj.box(1,1);
+    obj.setVelocity(1,3);
+    obj.once("velocity",function(dx,dy){
+      assert.equal(obj.polygon.pos.x,dx);
+      assert.equal(obj.polygon.pos.y,dy);
+      Sword.emit('undoVelocity', obj, true, true);
+      Sword.once("nextFrame",function(){
+        assert.equal(obj.polygon.pos.x,0);
+        assert.equal(obj.polygon.pos.y,0);
+        Sword.stop()
+        done()
+      })
+    });
+  });
+
+  it('should not move after removing velocity', function (done) {
+    const Sword= new sword();
+    const TestMap=new sword.GameMap();
+    const obj=new sword.Entity(1,1);
+    Sword.emit('velocity',obj);
+    Sword.emit('rmVelocity',obj);
+    obj.box(1,1);
+    obj.setVelocity(1,3);
+    obj.once("velocity",function(dx,dy){
+      assert.equal(obj.polygon.pos.x,0);
+      assert.equal(obj.polygon.pos.y,0);
+      sword.stop();
+      done()
+    });
   });
 });
 

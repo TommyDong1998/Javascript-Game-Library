@@ -21,12 +21,8 @@
 
     // Display basic server information
     function consoleStatus() {
-        console.log('///////////////////////////////////////////');
-        console.log('//Sword Engine Started Last Update 6/14/19//');
-        console.log('///////////////////////////////////////////');
         console.log(`Target ${settings.speed} fps`);
         console.log(`Map ${settings.width} width ${settings.height} height`);
-        console.log('///////////////////////////////////////////');
     }
 
     /*
