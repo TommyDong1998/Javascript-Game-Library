@@ -12,7 +12,8 @@ sword.monster=function(){
 	this.box(10,10)
 }
 
-var monster=world.e("monster")
+var monster=world.e("monster");
+/*
 var stone=world.e("2D,solid,randomStone")
 stone.box(10,10)
 
@@ -33,4 +34,4 @@ monster.onCollide("randomStone",()=>{
 	setTimeout(()=>{
 		monster.moveTo(0,1,10)
 	},1000);
-})
+})*/

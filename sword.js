@@ -29,7 +29,9 @@
         console.log('///////////////////////////////////////////');
     }
 
-    // Game map class
+    /*
+    Map that contains Entity classes
+    */
     class GameMap {
         constructor(server, w, h) {
             this.server = server;
@@ -73,7 +75,7 @@
             }
         }
         // //////////////////////////////////
-        // Find any objects that may collide
+        // Find any objects that may collide with this object
         // //////////////////////////////////
         find(object) {
             var returnVal = [];
@@ -84,7 +86,7 @@
             return returnVal;
         }
         // /////////////////////////////////////////////////
-        // Find any objects that may collide in the distance
+        // Find any objects within distance of object
         // /////////////////////////////////////////////////
         findNear(object, distance, cb) {
             var bound = JSON.parse(JSON.stringify(object.bound));
@@ -101,6 +103,7 @@
             return returnVal;
         }
 
+        //Remove object from map
         destroy(object) {
 			try{
 				this.quadTree.remove(object);
@@ -110,8 +113,9 @@
         }
     }
 
-    // Entity
-    // All creatures are entities
+    /*
+    All characters/enemies in game are entities
+    */
     class Entity extends EventEmitter {
         constructor(w, h) {
             super();
@@ -131,6 +135,7 @@
                 this.map.server.emit('remove', this.id);
             });
         }
+        //Move towards a object with timeout 
 		velocityTimeout(obj,amt,ms){
 			var d = new SAT.Vector(obj.x,obj.y);
             d.normalize();
@@ -143,7 +148,7 @@
 			},ms);
             return d;
 		}
-        //Velocity towards an object
+        //Move towards an object
         velocityToward(obj, amt) {
             var d = new SAT.Vector(obj.pos.x - this.pos.x, obj.pos.y - this.pos.y);
             d.normalize();
@@ -233,11 +238,13 @@
         }
     }
 
-    // All entity have different id
+    // All entity have different id. This will increment
     Entity.id = 0;
-    // ////////////////////
-    // Constructor
-    function main(cb,httpServer) {
+    
+    /*
+    Starts the main game loop
+    */
+    function constructor(cb,httpServer) {
         // Run one time
         consoleStatus();
         let opt;
@@ -333,10 +340,11 @@
         if(cb)
     		cb(settings, socket);
     }
+
     Object.assign(main.prototype, EventEmitter.prototype);
     Object.assign(main, {
         GameMap,
         Entity
     });
-    module.exports = main;
+    module.exports = constructor;
 })();
