@@ -1,14 +1,16 @@
 # Sword
 Example Game made at [here](http://multiplayerdungeon-env.eba-sdwfkmve.us-east-1.elasticbeanstalk.com/)
 
-## To Do
-Make bounding box better for rotation
+![npm version](https://img.shields.io/npm/v/swordengine)
+
+## How to install
+npm install swordengine
 
 ## Example
 Look at the example folder
 
 ```
-var sword=require("sword")
+var sword=require("swordengine")
 ///////////////
 //Monster move right
 //Monster touch stone
