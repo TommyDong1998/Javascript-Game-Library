@@ -46,3 +46,43 @@ monster.on("collide",(collision)=>{
 	console.log("Collided",collision)
 })
 ```
+
+## Class Entity
+
+velocityTimeout
+
+velocityToward
+
+setVelocity
+
+setPosition
+
+box
+
+circle
+
+size
+
+setOrigin
+
+rotate
+
+extend
+
+collideWith
+
+attach
+
+## Class GameMap
+e(entity, ...args)
+
+insert(object)
+
+update(object)
+
+update(object)
+
+findNear(object, distance, cb)
+
+destroy(object)
+
