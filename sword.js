@@ -1,3 +1,5 @@
+const { Polygon } = require('sat');
+
 (function() {
     'use strict';
     // ///////////////
@@ -165,7 +167,9 @@
             this.velocity.x += x;
             this.velocity.y += y;
         }
-        // Set location
+        /* Set location
+        If center is true. Will set position for center of object.
+        */
         setPosition(x, y) {
             this.polygon.pos.x = x;
             this.polygon.pos.y = y;
@@ -175,8 +179,8 @@
         }
         // Change entity hitbox
         box(w, h) {
-            w=Math.floor(w)
-            h=Math.floor(h)
+            w=Math.floor(w);
+            h=Math.floor(h);
             var vector;
             if (this.polygon)
                 vector = this.polygon.pos;
@@ -189,14 +193,16 @@
             return this;
         }
         // Change entity hitbox
+        // Note that circle pos is set at middle of circle
         circle(w) {
-            w= Math.floor(w)
+            w = Math.floor(w);
             var vector;
             if (this.polygon) {
                 vector = this.polygon.pos;
             } else {
                 vector = new SAT.Vector();
             }
+
             this.polygon = new SAT.Circle(vector, w / 2);
             this.pos = this.polygon.pos;
             this.setOrigin(w / 2, w / 2);

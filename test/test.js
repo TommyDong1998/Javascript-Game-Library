@@ -29,14 +29,35 @@ describe('Entity', function () {
       obj.box(1,1);
       obj2.circle(1);
       assert.equal(TestMap.find(obj).length, 1);
-      obj2.setPosition(1,1)
+      obj2.setPosition(100,100)
       assert.equal(TestMap.find(obj).length, 0);
-      obj.box(1,1)
-      assert.equal(TestMap.find(obj).length, 0);
+      obj.box(101,101)
+      assert.equal(TestMap.find(obj2).length, 1);
+      obj.circle(5)
+      assert.equal(TestMap.find(obj2).length, 0);
     });
 
   });
 
+  describe('collideWith', function () {
+
+    it('should work with circle polygon', function () {
+      const TestMap=new sword.GameMap();
+      const obj=new sword.Entity(1,1);
+      const obj2=new sword.Entity(1,1);
+      TestMap.insert(obj);
+      TestMap.insert(obj2);
+
+      //Change size
+      obj.box(1,1);
+      obj2.box(1,10);
+      obj2.setPosition(1,9);
+      assert.equal(TestMap.find(obj).length, 0);
+      obj.setOrigin(0,0)
+      assert.equal(TestMap.find(obj).length, 1);
+    });
+
+  });
 });
 
 
