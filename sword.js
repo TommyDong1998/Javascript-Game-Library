@@ -332,6 +332,7 @@
             collision.forEach((entity) => {
                 // Check collision
                 const overlapping = entity.collideWith();
+                if(overlapping.length>0)
                 entity.emit('collide', overlapping);
             });
 

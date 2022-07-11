@@ -14,11 +14,13 @@ class Monster extends sword.Entity{
 	}
 }
 
-var monster=new Monster();
+var map=new sword.GameMap();
+
+var monster=map.e(Monster);
 
 monster.setPosition(100,100);
 
-monster.velocityToward(10,)	//Move right at 10 a second
+monster.setVelocity(10,0);	//Move right at 10 a second
 
 var prev={};
 monster.on("NextFrame",()=>{
@@ -27,9 +29,7 @@ monster.on("NextFrame",()=>{
 		prev=monster.left()
 	}
 })
-monster.onCollide("randomStone",()=>{
-	console.log("Touching a stone")
-	setTimeout(()=>{
-		monster.moveTo(0,1,10)
-	},1000);
+
+monster.on("collide",(collision)=>{
+	console.log("Collided",collision)
 })
