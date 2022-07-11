@@ -6,8 +6,15 @@
   "scripts": {
     "start": "node example/index.js",
     "test": "mocha",
-    "test-with-coverage": "nyc --reporter=text mocha",
+    "nyctest": "nyc mocha",
+    "badge":   "istanbul-badges-readme",
     "publish": "npm publish --access public"
+  },
+  "nyc": {
+    "reporter": [
+      "json-summary",
+      "text"
+    ]
   },
   "author": "Tommy Dong",
   "dependencies": {
@@ -20,6 +27,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "istanbul-badges-readme": "^1.8.2",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0"
   }

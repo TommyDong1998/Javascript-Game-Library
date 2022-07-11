@@ -2,6 +2,7 @@
 Example Game made at [here](http://multiplayerdungeon-env.eba-sdwfkmve.us-east-1.elasticbeanstalk.com/)
 
 ![npm version](https://img.shields.io/npm/v/swordengine)
+![Lines](https://img.shields.io/badge/lines-57.07%25-red.svg?style=flat)
 
 ## How to install
 npm install swordengine
