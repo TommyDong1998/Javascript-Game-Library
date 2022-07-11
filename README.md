@@ -7,27 +7,30 @@ Make bounding box better for rotation
 ## Example
 Look at the example folder
 
-```var sword=require("../source/index.js")
+```
+var sword=require("sword")
 ///////////////
 //Monster move right
 //Monster touch stone
 //Monster move down
-var world=new sword(); //Automatically start game loop
+var world=new sword();
 
-sword.monster=function(){
-	//Add Component
-	this.addComponent("2D,solid,collision")
-	this.box(10,10)
+//Create a monster
+class Monster extends sword.Entity{
+	constructor(){
+		super();
+		world.emit('velocity', this);
+		world.emit('collision', this);
+	}
 }
 
-var monster=world.e("monster")
-var stone=world.e("2D,solid,randomStone")
-stone.box(10,10)
+var map=new sword.GameMap();
 
-monster.setLocation(100,100)
-stone.setLocation(150,100)
+var monster=map.e(Monster);
 
-monster.moveTo(1,0,10)	//Move right at 10 a second
+monster.setPosition(100,100);
+
+monster.setVelocity(10,0);	//Move right at 10 a second
 
 var prev={};
 monster.on("NextFrame",()=>{
@@ -36,10 +39,8 @@ monster.on("NextFrame",()=>{
 		prev=monster.left()
 	}
 })
-monster.onCollide("randomStone",()=>{
-	console.log("Touching a stone")
-	setTimeout(()=>{
-		monster.moveTo(0,1,10)
-	},1000);
+
+monster.on("collide",(collision)=>{
+	console.log("Collided",collision)
 })
 ```
