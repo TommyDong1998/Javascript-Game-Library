@@ -47,29 +47,29 @@ monster.on("collide",(collision)=>{
 
 ## Class Entity
 
-velocityTimeout
+velocityTimeout(obj,amt,ms)
 
-velocityToward
+velocityToward(obj, amt)
 
-setVelocity
+setVelocity(x,y)
 
-setPosition
+setPosition(x,y)
 
-box
+box(w, h)
 
-circle
+circle(rad)
 
-size
+size(w, h)
 
-setOrigin
+setOrigin(x, y)
 
-rotate
+rotate(rad)
 
-extend
+extend(type)
 
-collideWith
+collideWith()
 
-attach
+attach(obj)
 
 ## Class GameMap
 e(entity, ...args)
