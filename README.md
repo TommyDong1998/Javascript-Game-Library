@@ -1,11 +1,5 @@
 # Sword
-Custom game engine. It uses quite a few other libraries. Example Game made at [here](http://multiplayerdungeon-env.eba-sdwfkmve.us-east-1.elasticbeanstalk.com/)
-
-
-https://github.com/primus/eventemitter3
-https://github.com/Luka967/SpatialHash (slightly modified)
-http://bluebirdjs.com/docs/getting-started.html
-https://github.com/jriecken/sat-js
+Example Game made at [here](http://multiplayerdungeon-env.eba-sdwfkmve.us-east-1.elasticbeanstalk.com/)
 
 ## To Do
 Make bounding box better for rotation
