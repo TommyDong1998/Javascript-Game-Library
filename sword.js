@@ -42,6 +42,14 @@
                 maxy: h
             }, 64, 10);
         }
+
+        //Shorthand for creating an object and inserting it
+        e(entity, ...args){
+            const Entity=new entity(args);
+            this.insert(Entity);
+            return Entity;
+        }
+
         insert(object) {
             object.map = this;
             object.bound = {
@@ -102,7 +110,6 @@
             });
             return returnVal;
         }
-
         //Remove object from map
         destroy(object) {
 			try{
@@ -156,6 +163,11 @@
             this.velocity.x += d.x;
             this.velocity.y += d.y;
             return d;
+        }
+        //Set Velocity
+        setVelocity(x,y) {
+            this.velocity.x += x;
+            this.velocity.y += y;
         }
         // Set location
         setPosition(x, y) {
@@ -237,6 +249,7 @@
             this.attachE.push(obj);
         }
     }
+
 
     // All entity have different id. This will increment
     Entity.id = 0;
@@ -341,8 +354,8 @@
     		cb(settings, socket);
     }
 
-    Object.assign(main.prototype, EventEmitter.prototype);
-    Object.assign(main, {
+    Object.assign(constructor.prototype, EventEmitter.prototype);
+    Object.assign(constructor, {
         GameMap,
         Entity
     });

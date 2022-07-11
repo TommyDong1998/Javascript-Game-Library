@@ -6,21 +6,19 @@ var sword=require("../sword.js")
 var world=new sword();
 
 //Create a monster
-sword.monster=function(){
-	//Add Component
-	this.addComponent("2D,solid,collision")
-	this.box(10,10)
+class Monster extends sword.Entity{
+	constructor(){
+		super();
+		world.emit('velocity', this);
+		world.emit('collision', this);
+	}
 }
 
-var monster=world.e("monster");
-/*
-var stone=world.e("2D,solid,randomStone")
-stone.box(10,10)
+var monster=new Monster();
 
-monster.setLocation(100,100)
-stone.setLocation(150,100)
+monster.setPosition(100,100);
 
-monster.moveTo(1,0,10)	//Move right at 10 a second
+monster.velocityToward(1,0,10)	//Move right at 10 a second
 
 var prev={};
 monster.on("NextFrame",()=>{
@@ -34,4 +32,4 @@ monster.onCollide("randomStone",()=>{
 	setTimeout(()=>{
 		monster.moveTo(0,1,10)
 	},1000);
-})*/
+})
