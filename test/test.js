@@ -131,6 +131,7 @@ describe('Sword', function () {
     let success=false;
     obj2.once("collide",function(){
       success=true;
+      Sword.stop();
       done()
     })
   });

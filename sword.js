@@ -295,7 +295,7 @@
             perMessageDeflate: false
             }
         }
-        const socket = new WebSocket.Server(opt);
+        this._socket = new WebSocket.Server(opt);
         const velocity = [];
         const collision = [];
         let undoVelocity = [];
@@ -328,7 +328,7 @@
         });
 
         let lastTick = Date.now();
-        const loop=setInterval(() => {
+        this.loop=setInterval(() => {
             //Calculate delta
             const currentTicket=Date.now();
             let delta=(currentTicket-lastTick)/1000;
@@ -377,7 +377,10 @@
         if(cb)
     		cb(settings, socket);
     }
-
+    constructor.prototype.stop=function(){
+        clearInterval(this.loop);
+        this._socket.close();
+    }
     Object.assign(constructor.prototype, EventEmitter.prototype);
     Object.assign(constructor, {
         GameMap,
