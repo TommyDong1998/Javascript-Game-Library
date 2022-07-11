@@ -207,6 +207,8 @@
         size(w, h) {
             this.width = w;
             this.height = h;
+            if (this.map && this._quadNode)
+                this.map.update(this);
         }
         // set origin
         setOrigin(x, y) {
