@@ -67,12 +67,13 @@ const { Polygon } = require('sat');
                     maxx: object.pos.x + object.width,
                     maxy: object.pos.y + object.height
                 };
+                //If have rotation then increase bounding box
                 if (object.rad) {
                     var max = object.height > object.width ? object.height : object.width;
                     object.bound.minx -= max;
-                    object.bound.maxx += 2 * max;
+                    object.bound.maxx += max;
                     object.bound.miny -= max;
-                    object.bound.maxy += 2 * max;
+                    object.bound.maxy += max;
                 }
                 if (object._quadNode)
                     this.quadTree.update(object);

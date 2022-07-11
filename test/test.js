@@ -27,21 +27,51 @@ describe('Entity', function () {
 
       //Change size
       obj.box(1,1);
-      obj2.circle(1);
-      assert.equal(TestMap.find(obj).length, 1);
+      obj2.circle(10);
+      assert.equal(obj.collideWith().length, 1);
       obj2.setPosition(100,100)
-      assert.equal(TestMap.find(obj).length, 0);
+      assert.equal(obj.collideWith().length, 0);
       obj.box(101,101)
-      assert.equal(TestMap.find(obj2).length, 1);
-      obj.circle(5)
-      assert.equal(TestMap.find(obj2).length, 0);
+      assert.equal(obj2.collideWith().length, 1);
+      obj.box(100,100)
+      assert.equal(obj2.collideWith().length, 0);
     });
 
+    it('should work with polygon polygon', function () {
+      const TestMap=new sword.GameMap();
+      const obj=new sword.Entity(1,1);
+      const obj2=new sword.Entity(1,1);
+      TestMap.insert(obj);
+      TestMap.insert(obj2);
+
+      //Change size
+      obj.box(10,10);
+      obj2.box(10,10);
+      assert.equal(obj.collideWith().length, 1);
+      obj2.setPosition(100,100)
+      assert.equal(obj.collideWith().length, 0);
+      obj.box(101,101)
+      assert.equal(obj.collideWith().length, 1);
+    });
+    it('should work with circle circle', function () {
+      const TestMap=new sword.GameMap();
+      const obj=new sword.Entity(1,1);
+      const obj2=new sword.Entity(1,1);
+      TestMap.insert(obj);
+      TestMap.insert(obj2);
+
+      //Change size
+      obj.circle(1);
+      obj2.circle(1);
+      assert.equal(obj.collideWith().length, 1);
+      obj2.setPosition(1,1)
+      assert.equal(obj.collideWith().length, 0);
+    });
   });
 
-  describe('collideWith', function () {
+  describe('rotate', function () {
 
-    it('should work with circle polygon', function () {
+    it('should detect collision after rotation', function () {
       const TestMap=new sword.GameMap();
       const obj=new sword.Entity(1,1);
       const obj2=new sword.Entity(1,1);
@@ -50,18 +80,42 @@ describe('Entity', function () {
 
       //Change size
       obj.box(1,1);
-      obj2.box(1,10);
+      obj2.box(10,10);
       obj2.setPosition(1,9);
-      assert.equal(TestMap.find(obj).length, 0);
-      obj.setOrigin(0,0)
-      obj2.rotate(90)
+      assert.equal(obj.collideWith().length, 0);
+      obj2.setOrigin(0,0)
+      obj2.rotate(3.14)
       assert.equal(TestMap.find(obj).length, 1);
+      assert.equal(obj.collideWith().length, 1);
     });
 
+    
   });
+
+  describe('velocityToward',function(){
+
+    it('should move towards object', function (done) {
+      const Sword= new sword();
+      const TestMap=new sword.GameMap();
+      const obj=new sword.Entity(1,1);
+      const obj2=new sword.Entity(1,1);
+      TestMap.insert(obj);
+      TestMap.insert(obj2);
+
+      //Change size
+      obj.box(10,10);
+      obj2.box(10,10);
+      obj2.setPosition(10,0);
+      Sword.emit('velocity',obj);
+      obj.once('velocity',function(dx,dy){
+        Sword.stop();
+        let correct=dx>0 && dy==0;
+        done(correct);
+      })
+    });
+  })
+
 });
-
-
 /* Test the GameMap Class */
 describe('GameMap', function () {
 
@@ -190,24 +244,27 @@ describe('Sword', function () {
     })
   });
 
-  it('objects that emit undoVelocity return to original location', function (done) {
-    const Sword= new sword();
-    const TestMap=new sword.GameMap();
-    const obj=new sword.Entity(1,1);
-    Sword.emit('velocity',obj);
-    obj.box(1,1);
-    obj.setVelocity(1,3);
-    obj.once("velocity",function(dx,dy){
-      assert.equal(obj.polygon.pos.x,dx);
-      assert.equal(obj.polygon.pos.y,dy);
-      Sword.emit('undoVelocity', obj, true, true);
-      Sword.once("nextFrame",function(){
-        assert.equal(obj.polygon.pos.x,0);
-        assert.equal(obj.polygon.pos.y,0);
-        Sword.stop()
-        done()
-      })
-    });
+  it('objects that emit undoVelocity return to original location', function () {
+    return new Promise(function(resolve){
+      const Sword= new sword();
+      const TestMap=new sword.GameMap();
+      const obj=new sword.Entity(1,1);
+      Sword.emit('velocity',obj);
+      obj.box(1,1);
+      obj.setVelocity(1,3);
+      obj.once("velocity",function(dx,dy){
+        assert.equal(obj.polygon.pos.x,dx);
+        assert.equal(obj.polygon.pos.y,dy);
+        Sword.emit('undoVelocity', obj, true, true);
+        Sword.once("nextFrame",function(){
+          Sword.stop();
+          resolve(obj);
+        })
+      });
+    }).then(function(){
+      assert.equal(obj.polygon.pos.x,0);
+      assert.equal(obj.polygon.pos.y,0);
+    })
   });
 
   it('should not move after removing velocity', function (done) {
