@@ -16,6 +16,26 @@ describe('Entity', function () {
 
   });
 
+  describe('collideWith', function () {
+
+    it('should work with circle polygon', function () {
+      const TestMap=new sword.GameMap();
+      const obj=new sword.Entity(1,1);
+      const obj2=new sword.Entity(1,1);
+      TestMap.insert(obj);
+      TestMap.insert(obj2);
+
+      //Change size
+      obj.box(1,1);
+      obj2.circle(1);
+      assert.equal(TestMap.find(obj).length, 1);
+      obj2.setPosition(1,1)
+      assert.equal(TestMap.find(obj).length, 0);
+      obj.box(1,1)
+      assert.equal(TestMap.find(obj).length, 0);
+    });
+
+  });
 
 });
 
@@ -173,15 +193,16 @@ describe('Sword', function () {
     const TestMap=new sword.GameMap();
     const obj=new sword.Entity(1,1);
     Sword.emit('velocity',obj);
+    
+    obj.setVelocity(1,3);
     Sword.emit('rmVelocity',obj);
     obj.box(1,1);
-    obj.setVelocity(1,3);
-    obj.once("velocity",function(dx,dy){
+    setTimeout(function(){
       assert.equal(obj.polygon.pos.x,0);
       assert.equal(obj.polygon.pos.y,0);
-      sword.stop();
+      Sword.stop();
       done()
-    });
+    },1);
   });
 });
 

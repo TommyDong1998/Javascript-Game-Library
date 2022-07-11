@@ -175,12 +175,14 @@
         }
         // Change entity hitbox
         box(w, h) {
+            w=Math.floor(w)
+            h=Math.floor(h)
             var vector;
             if (this.polygon)
                 vector = this.polygon.pos;
             else
                 vector = new SAT.Vector();
-            this.polygon = new SAT.Box(vector, Math.floor(w), Math.floor(h)).toPolygon();
+            this.polygon = new SAT.Box(vector, w,h).toPolygon();
             this.pos = this.polygon.pos;
             this.setOrigin(w / 2, h / 2);
             this.size(w, h);
@@ -188,6 +190,7 @@
         }
         // Change entity hitbox
         circle(w) {
+            w= Math.floor(w)
             var vector;
             if (this.polygon) {
                 vector = this.polygon.pos;
