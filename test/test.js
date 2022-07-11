@@ -54,6 +54,7 @@ describe('Entity', function () {
       obj2.setPosition(1,9);
       assert.equal(TestMap.find(obj).length, 0);
       obj.setOrigin(0,0)
+      obj2.rotate(90)
       assert.equal(TestMap.find(obj).length, 1);
     });
 
