@@ -1,6 +1,6 @@
 {
   "name": "swordengine",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Game",
   "main": "sword.js",
   "scripts": {
