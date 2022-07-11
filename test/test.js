@@ -110,12 +110,12 @@ describe('GameMap', function () {
 
 /* Test the GameMap Class */
 describe('Sword', function () {
-  it('collide should trigger', async function () {
+  it('collide should trigger', function (done) {
     const Sword= new sword();
     const TestMap=new sword.GameMap();
     const obj=new sword.Entity(1,1);
     obj.box(1,1);
-    
+
     const obj2=new sword.Entity(1,1);
     obj2.box(1,1);
     
@@ -129,14 +129,10 @@ describe('Sword', function () {
     assert.equal(TestMap.find(obj).length, 1);
     
     let success=false;
-    await (new Promise(
-      function(resolve){
-        obj2.once("collide",function(){
-        success=true;
-        resolve();
-      })
-    }));
-    assert.equal(success,true);
+    obj2.once("collide",function(){
+      success=true;
+      done()
+    })
   });
 });
 

@@ -241,8 +241,29 @@
             // Checks if what this object may collide with
             this.map.find(this).forEach((enemy) => {
                 // Check if they actually collide
-                if (SAT.testPolygonPolygon(this.polygon, enemy.polygon)) {
-                    return returnVal.push(enemy);
+                const a=this.polygon;
+                const b=enemy.polygon;
+                if(a instanceof SAT.Polygon){
+                    if(b instanceof SAT.Polygon){
+                        if (SAT.testPolygonPolygon(this.polygon, enemy.polygon)) {
+                            return returnVal.push(enemy);
+                        }
+                    }else{
+                        if (SAT.testPolygonCircle(this.polygon, enemy.polygon)) {
+                            return returnVal.push(enemy);
+                        }
+                    }
+                }
+                else{
+                    if(b instanceof SAT.Polygon){
+                        if (SAT.testCirclePolygon(this.polygon, enemy.polygon)) {
+                            return returnVal.push(enemy);
+                        }
+                    }else{
+                        if (SAT.testCircleCircle(this.polygon, enemy.polygon)) {
+                            return returnVal.push(enemy);
+                        }
+                    }
                 }
             });
             return returnVal;
