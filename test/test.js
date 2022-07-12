@@ -105,15 +105,59 @@ describe('Entity', function () {
       //Change size
       obj.box(10,10);
       obj2.box(10,10);
+      obj.setPosition(0,0);
       obj2.setPosition(10,0);
       Sword.emit('velocity',obj);
+      obj.velocityToward(obj2,1);
       obj.once('velocity',function(dx,dy){
-        Sword.stop();
+        console.log("\n\n\nvalues",dx,dy,"\n\n\n")
         let correct=dx>0 && dy==0;
-        done(correct);
+        Sword.stop();
+        done(!correct);
       })
     });
+
+    it('should move towards object with timeout', function (done) {
+      const Sword= new sword();
+      const TestMap=new sword.GameMap();
+      const obj=new sword.Entity(1,1);
+      const obj2=new sword.Entity(1,1);
+      TestMap.insert(obj);
+      TestMap.insert(obj2);
+
+      //Change size
+      obj.box(10,10);
+      obj2.box(10,10);
+      obj2.setPosition(10,0);
+      Sword.emit('velocity',obj);
+      obj.velocityTimeout(obj2,10,1);
+      setTimeout(function(){
+        Sword.stop();
+        let correct=obj.velocity.x==0 &&obj.velocity.y==0;
+        done(!correct);
+      },100)
+    });
   })
+
+  describe('remove', function () {
+
+    it('should not collision after remove', function () {
+      const Sword=new sword();
+      const TestMap=new sword.GameMap(Sword,1000,1000);
+      const obj=new sword.Entity(1,1);
+      const obj2=new sword.Entity(1,1);
+      TestMap.insert(obj);
+      TestMap.insert(obj2);
+
+      //Change size
+      obj.box(1,1);
+      obj.emit('remove');
+      assert.equal(obj2.collideWith().length, 0);
+      Sword.stop();
+    });
+
+    
+  });
 
 });
 /* Test the GameMap Class */
@@ -138,7 +182,25 @@ describe('GameMap', function () {
       assert.equal(obj.map, TestMap);
     });
   });
+  
+  describe('destroy', function () {
 
+    it('should not collision after destroy', function () {
+      const TestMap=new sword.GameMap();
+      const obj=new sword.Entity(1,1);
+      const obj2=new sword.Entity(1,1);
+      TestMap.insert(obj);
+      TestMap.insert(obj2);
+
+      //Change size
+      obj.box(1,1);
+      obj2.box(10,10);
+      TestMap.destroy(obj);
+      assert.equal(obj2.collideWith().length, 0);
+    });
+
+    
+  });
   describe('find box circle findNear', function () {
 
 
