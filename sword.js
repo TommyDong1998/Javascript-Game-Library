@@ -31,7 +31,7 @@ const { Polygon } = require('sat');
     Map that contains Entity classes
     */
     class GameMap {
-        constructor(server, w, h) {
+        constructor(server, w=settings.width, h=settings.height) {
             this.server = server;
             this.quadTree = new QuadNode({
                 minx: 0,

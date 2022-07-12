@@ -15,7 +15,7 @@ class Monster extends sword.Entity{
 	}
 }
 
-const map=new sword.GameMap();
+const map=new sword.GameMap(world);
 
 const monster=map.e(Monster);
 
