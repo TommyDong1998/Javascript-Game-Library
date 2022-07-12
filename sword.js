@@ -383,7 +383,7 @@ const { Polygon } = require('sat');
             this.emit('nextFrame');
         }, Math.floor(1000 / settings.speed/10)*10);
         if(cb)
-    		cb(settings, socket);
+    		cb(settings, this._socket);
     }
     constructor.prototype.stop=function(){
         clearInterval(this.loop);
