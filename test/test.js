@@ -139,7 +139,7 @@ describe('GameMap', function () {
     });
   });
 
-  describe('find box circle', function () {
+  describe('find box circle findNear', function () {
 
 
     it('should be able to detect nearby object after changing position', function () {
@@ -201,7 +201,21 @@ describe('GameMap', function () {
       obj2.circle(2,1);
       assert.equal(TestMap.find(obj).length, 1);
     });
+
+    it('should be able to detect nearby objects with findnear', function () {
+      const TestMap=new sword.GameMap();
+      const obj=new sword.Entity(1,1);
+      const obj2=new sword.Entity(1,1);
+      TestMap.insert(obj);
+      TestMap.insert(obj2);
+
+      //Change location
+      obj.setPosition(1,0);
+      assert.equal(TestMap.findNear(obj,10).length, 2);
+    });
   });
+
+  
 });
 
 /* Test the GameMap Class */
@@ -261,7 +275,7 @@ describe('Sword', function () {
           resolve(obj);
         })
       });
-    }).then(function(){
+    }).then(function(obj){
       assert.equal(obj.polygon.pos.x,0);
       assert.equal(obj.polygon.pos.y,0);
     })

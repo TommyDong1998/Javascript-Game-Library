@@ -351,10 +351,12 @@ const { Polygon } = require('sat');
             velocity.forEach((entity) => {
                 entity.dx = entity.velocity.x * delta;
                 entity.dy = entity.velocity.y * delta;
-                entity.setPosition(entity.polygon.pos.x + entity.dx, entity.polygon.pos.y + entity.dy);
-                entity.emit('velocity', entity.dx, entity.dy);
-                for (var x of entity.attachE) {
-                    x.setPosition(x.polygon.pos.x + entity.dx, x.polygon.pos.y + entity.dy);
+                if(entity.dx!=0||entity.dy!=0){
+                    entity.setPosition(entity.polygon.pos.x + entity.dx, entity.polygon.pos.y + entity.dy);
+                    entity.emit('velocity', entity.dx, entity.dy);
+                    for (var x of entity.attachE) {
+                        x.setPosition(x.polygon.pos.x + entity.dx, x.polygon.pos.y + entity.dy);
+                    }
                 }
             });
 
