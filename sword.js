@@ -139,6 +139,7 @@ const { Polygon } = require('sat');
                 this.removed = true;
                 this.map.destroy(this);
                 this.map.server.emit('remove', this.id);
+                this.removeAllListeners();
             });
         }
         //Move towards a object with timeout 
