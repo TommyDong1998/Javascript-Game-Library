@@ -1,13 +1,13 @@
 {
   "name": "swordengine",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Game",
   "main": "sword.js",
   "scripts": {
     "start": "node example/index.js",
     "test": "mocha",
     "nyctest": "nyc mocha",
-    "badge":   "istanbul-badges-readme",
+    "badge": "istanbul-badges-readme",
     "publish": "npm publish --access public"
   },
   "nyc": {
