@@ -58,6 +58,7 @@ const { Polygon } = require('sat');
             };
             this.quadTree.insert(object);
         }
+        
         update(object) {
             //Sometimes object is deleted already
             try {
@@ -139,7 +140,9 @@ const { Polygon } = require('sat');
                 this.removed = true;
                 this.map.destroy(this);
                 this.map.server.emit('remove', this.id);
-                this.removeAllListeners();
+                setImmediate(()=>{
+                    this.removeAllListeners();
+                })
             });
         }
         //Move towards a object with timeout 
