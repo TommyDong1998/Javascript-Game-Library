@@ -306,17 +306,17 @@ const { Polygon } = require('sat');
             }
         }
         this._socket = new WebSocket.Server(opt);
-        const velocity = [];
-        const collision = [];
+        this._velocityItems = [];
+        this._collisionItems = [];
         let undoVelocity = [];
         this.on('velocity', (object) => {
-            velocity.push(object);
+            this._velocityItems.push(object);
             object.once('remove', () => {
-                velocity.splice(velocity.indexOf(object), 1);
+                this._velocityItems.splice(this._velocityItems.indexOf(object), 1);
             });
         });
         this.on('rmVelocity', (object) => {
-            velocity.splice(velocity.indexOf(object), 1);
+            this._velocityItems.splice(this._velocityItems.indexOf(object), 1);
         });
         this.on('undoVelocity', (o, x, y) => {
             if (undoVelocity.indexOf(o) == -1)
@@ -327,14 +327,14 @@ const { Polygon } = require('sat');
                 });
         });
         this.on('collision', (object) => {
-            collision.push(object);
+            this._collisionItems.push(object);
             object.once('remove', () => {
-				if(collision.indexOf(object)!=-1)
-                collision.splice(collision.indexOf(object), 1);
+				if(this._collisionItems.indexOf(object)!=-1)
+                this._collisionItems.splice(this._collisionItems.indexOf(object), 1);
             });
         });
         this.on('rmCollision', (object) => {
-            collision.splice(collision.indexOf(object), 1);
+            this._collisionItems.splice(this._collisionItems.indexOf(object), 1);
         });
 
         let lastTick = Date.now();
@@ -352,7 +352,7 @@ const { Polygon } = require('sat');
                 delta=0.05;
             }
             
-            velocity.forEach((entity) => {
+            this._velocityItems.forEach((entity) => {
                 entity.dx = entity.velocity.x * delta;
                 entity.dy = entity.velocity.y * delta;
                 if(entity.dx!=0||entity.dy!=0){
@@ -364,7 +364,7 @@ const { Polygon } = require('sat');
                 }
             });
 
-            collision.forEach((entity) => {
+            this._collisionItems.forEach((entity) => {
                 // Check collision
                 const overlapping = entity.collideWith();
                 if(overlapping.length>0)
