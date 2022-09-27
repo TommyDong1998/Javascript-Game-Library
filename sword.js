@@ -249,7 +249,9 @@ const { Polygon } = require('sat');
         collideWith(condition) {
             var returnVal = [];
             // Checks if what this object may collide with
-            this.map.find(this).forEach((enemy) => {
+            let obj=this.map.find(this)
+            for(let i=0;i<obj.length;i++){
+                let enemy=obj[i];
                 // Check if they actually collide
                 const a=this.polygon;
                 const b=enemy.polygon;
@@ -258,12 +260,14 @@ const { Polygon } = require('sat');
                     if(b instanceof SAT.Polygon){
                         if (SAT.testPolygonPolygon(this.polygon, enemy.polygon,response)) {
                             enemy._response=response;
-                            return returnVal.push(enemy);
+                            returnVal.push(enemy);
+                            continue;
                         }
                     }else{
                         if (SAT.testPolygonCircle(this.polygon, enemy.polygon,response)) {
                             enemy._response=response;
-                            return returnVal.push(enemy);
+                            returnVal.push(enemy);
+                            continue;
                         }
                     }
                 }
@@ -271,18 +275,20 @@ const { Polygon } = require('sat');
                     if(b instanceof SAT.Polygon){
                         if (SAT.testCirclePolygon(this.polygon, enemy.polygon,response)) {
                             enemy._response=response;
-                            return returnVal.push(enemy);
+                            returnVal.push(enemy);
+                            continue;
                         }
                     }else{
                         if (SAT.testCircleCircle(this.polygon, enemy.polygon,response)) {
                             enemy._response=response;
-                            return returnVal.push(enemy);
+                            returnVal.push(enemy);
+                            continue;
                         }
                     }
                 }
                 if(condition && condition(enemy))
                     return returnVal
-            });
+            };
             return returnVal;
         }
         attach(obj) {
