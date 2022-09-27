@@ -23,7 +23,7 @@
     "ws": "^6.1.2"
   },
   "engines": {
-    "node": "^18.2.0"
+    "node": "^16.2.0"
   },
   "license": "MIT",
   "devDependencies": {
