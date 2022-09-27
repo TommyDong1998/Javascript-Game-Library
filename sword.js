@@ -246,35 +246,42 @@ const { Polygon } = require('sat');
             return this;
         }
         // Return what this object collide with
-        collideWith() {
+        collideWith(condition) {
             var returnVal = [];
             // Checks if what this object may collide with
             this.map.find(this).forEach((enemy) => {
                 // Check if they actually collide
                 const a=this.polygon;
                 const b=enemy.polygon;
+                var response = new SAT.Response();
                 if(a instanceof SAT.Polygon){
                     if(b instanceof SAT.Polygon){
-                        if (SAT.testPolygonPolygon(this.polygon, enemy.polygon)) {
+                        if (SAT.testPolygonPolygon(this.polygon, enemy.polygon,response)) {
+                            enemy._response=response;
                             return returnVal.push(enemy);
                         }
                     }else{
-                        if (SAT.testPolygonCircle(this.polygon, enemy.polygon)) {
+                        if (SAT.testPolygonCircle(this.polygon, enemy.polygon,response)) {
+                            enemy._response=response;
                             return returnVal.push(enemy);
                         }
                     }
                 }
                 else{
                     if(b instanceof SAT.Polygon){
-                        if (SAT.testCirclePolygon(this.polygon, enemy.polygon)) {
+                        if (SAT.testCirclePolygon(this.polygon, enemy.polygon,response)) {
+                            enemy._response=response;
                             return returnVal.push(enemy);
                         }
                     }else{
-                        if (SAT.testCircleCircle(this.polygon, enemy.polygon)) {
+                        if (SAT.testCircleCircle(this.polygon, enemy.polygon,response)) {
+                            enemy._response=response;
                             return returnVal.push(enemy);
                         }
                     }
                 }
+                if(condition && condition(enemy))
+                    return returnVal
             });
             return returnVal;
         }
