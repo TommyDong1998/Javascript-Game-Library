@@ -1,4 +1,4 @@
-# Sword
+# Javascript Game Library
 Example Game made at [here](http://multiplayerdungeon-env.eba-sdwfkmve.us-east-1.elasticbeanstalk.com/)
 
 Test Coverage
@@ -7,6 +7,7 @@ Test Coverage
 ![Branches](https://img.shields.io/badge/branches-71.21%25-red.svg?style=flat)
 ![Functions](https://img.shields.io/badge/functions-87.5%25-yellow.svg?style=flat)
 ![Lines](https://img.shields.io/badge/lines-91.45%25-brightgreen.svg?style=flat)
+
 
 ## How to install
 npm install swordengine
