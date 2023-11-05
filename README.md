@@ -1,5 +1,5 @@
 # Javascript Game Library
-Example Game made at [here](http://multiplayerdungeon-env.eba-sdwfkmve.us-east-1.elasticbeanstalk.com/)
+Example Game made at [here](https://usurpthenight.com)
 
 Test Coverage
 
